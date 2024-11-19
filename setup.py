@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="num_word_converter",
-    version="0.1",
+    name="num-word-converter",
+    version="1.0.1",
     packages=find_packages(),
 
     # Metadata
