@@ -19,9 +19,19 @@ print(word_to_num("one hundred and twenty-three"))
 ```
 
 ### Running the tests
-To run the tests, navigate to the test directory and run the test file using a 
-test runner such as unittest or pytest:
+Tests are run using tox, which also builds a coverage report.
+
+If you haven't installed tox, install it using pip:
 
 ```bash
-python -m unittest discover -s tests
+pip install tox
 ```
+Then to run the tests, simply run tox from the project root:
+
+```bash
+tox
+```
+
+This will run the tests in each environment specified in tox.ini, and generate a coverage report.
+Note that tox handles setting up the virtual environments and installing dependencies, so it's not necessary 
+to activate a virtual environment or install dependencies manually.
