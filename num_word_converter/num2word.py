@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-.
 from typing import Union
 
-from NumWordConverter.errors import (
+from num_word_converter.errors import (
     ComplexNumberInputError,
     FractionTooLongError,
     NonNumberInputError,
 )
-from NumWordConverter.word2num import WORD_TO_DIGIT
+from num_word_converter.word2num import WORD_TO_DIGIT
 
 DIGIT_TO_WORD = {scale: word for word, scale in WORD_TO_DIGIT.items()}
 

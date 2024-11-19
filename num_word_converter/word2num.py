@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-.
-from NumWordConverter.consts import UNITS, TENS, SCALES
-from NumWordConverter.errors import (
+from num_word_converter.consts import UNITS, TENS, SCALES
+from num_word_converter.errors import (
     ScaleOutOfOrderError,
     ScaleGapError,
     NoConversionForWordError,
