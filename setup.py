@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="num-word-converter",
-    version="1.0.2",
+    version="1.0.4",
     packages=find_packages(),
 
     # Metadata
