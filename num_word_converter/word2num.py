@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-.
+from typing import List, Union
+
 from num_word_converter.consts import UNITS, TENS, SCALES
 from num_word_converter.errors import (
     ScaleOutOfOrderError,
-    ScaleGapError,
     NoConversionForWordError,
 )
 
@@ -14,63 +15,67 @@ WORD_TO_DIGIT.update(
 )
 
 
-def word_to_num(word: str) -> float:
-    """
-    Convert a string representation of a number into a digit.
-
-    :param word: The word to convert.
-    :return: The converted digit.
-    """
-    word = word.lower()
-    if "point" in word:
-        whole_part, fractional_part = word.split("point", 1)
-        return convert_whole_part_to_digit(
-            whole_part.strip()
-        ) + convert_fractional_part_to_digit(fractional_part.strip())
-    else:
-        return convert_whole_part_to_digit(word)
-
-
-def convert_whole_part_to_digit(word: str) -> int:
-    """
-    Convert the whole part of a string representation of a number into a digit.
-
-    :param word: The word representing the whole part of the number.
-    :return: The converted digit.
-    """
+def convert_word_to_digit(word_parts: List[str]) -> int:
     current = result = 0
-    previous_scale = None
-    for token in word.split():
-        if token in WORD_TO_DIGIT:
-            scale = WORD_TO_DIGIT[token]
-            if token in SCALES:
-                if previous_scale and scale <= previous_scale:
-                    raise ScaleOutOfOrderError(f"{token} after {previous_scale}")
-                current *= scale
-                previous_scale = scale
-            else:
-                if previous_scale and previous_scale >= 1000:
-                    raise ScaleGapError(
-                        f"Number missing between {previous_scale} and {scale}"
-                    )
-                current += scale
-                previous_scale = None
+    previous_token_was_scale = False
+    for token in word_parts:
+        if token == 'and':
+            continue
+        if token not in WORD_TO_DIGIT:
+            raise NoConversionForWordError(f"No conversion for {token}")
+        scale = WORD_TO_DIGIT[token]
+        if token in SCALES:
+            if previous_token_was_scale:
+                raise ScaleOutOfOrderError(f"{token} after scale")
+            previous_token_was_scale = True
         else:
-            raise NoConversionForWordError("No conversion for " + token)
-
+            previous_token_was_scale = False
+        if current == 0:
+            current = scale
+        elif scale > current:
+            current *= scale
+        else:
+            current += scale
         if current >= 1000:
             result += current
             current = 0
-
     return result + current
 
 
-def convert_fractional_part_to_digit(word: str) -> float:
+def word_to_num(word: str) -> Union[int, float]:
+    """
+    function to convert number words into an integer
+    :param word: str
+    :return: Union[int, float]
+    """
+    if word.isdigit():
+        return int(word)
+
+    # Check if 'point' is in the word. If so, we have a decimal number
+    if "point" in word:
+        whole, frac = word.split("point")
+        whole = whole.strip()
+        frac = frac.strip()
+
+        whole_parts = whole.replace("-", " ").lower().split()
+        frac_parts = frac.replace("-", " ").lower().split()
+
+        return convert_word_to_digit(whole_parts) + convert_word_to_digit(frac_parts) * 10 ** (-len(frac_parts))
+
+    # Handle compound numbers (numbers that are hyphenated)
+    word = word.replace("-", " ")
+
+    word_parts = word.lower().split()
+    return convert_word_to_digit(word_parts)
+
+
+def convert_fractional_part_to_digit(word_parts: List[str]) -> float:
     """
     Convert the fractional part of a string representation of a number into a digit.
 
-    :param word: The word representing the fractional part of the number.
+    :param word_parts: The words representing the fractional part of the number.
     :return: The converted digit.
     """
-    digits = [convert_whole_part_to_digit(token) for token in word.split()]
-    return sum(digit / (10**i) for i, digit in enumerate(digits, start=1))
+    digits = [convert_word_to_digit([token]) for token in word_parts]
+    return sum(digit / (10 ** i) for i, digit in enumerate(digits, start=1))
+

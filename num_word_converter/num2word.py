@@ -36,9 +36,9 @@ def num_to_word(n: Union[float, int]) -> str:
                 "The fractional part of the input float is too long to convert to words."
             )
         return (
-            num_to_word(int_part)
-            + " point "
-            + " ".join(num_to_word(int(c)) for c in str(frac_part))
+                num_to_word(int_part)
+                + " point "
+                + " ".join(num_to_word(int(c)) for c in str(frac_part))
         )
 
     if n < 0:
@@ -50,10 +50,17 @@ def num_to_word(n: Union[float, int]) -> str:
         if n % 10 == 0:
             return DIGIT_TO_WORD[n]
         else:
-            return DIGIT_TO_WORD[n // 10 * 10] + "-" + DIGIT_TO_WORD[n % 10]
+            tens = n // 10 * 10
+            ones = n % 10
+            if ones == 0:
+                return DIGIT_TO_WORD[tens]
+            else:
+                return DIGIT_TO_WORD[tens] + "-" + DIGIT_TO_WORD[ones]
     elif n < 1000:
         if n % 100 == 0:
             return DIGIT_TO_WORD[n // 100] + " hundred"
+        elif n % 100 < 10:
+            return DIGIT_TO_WORD[n // 100] + " hundred and " + DIGIT_TO_WORD[n % 100]
         else:
             return DIGIT_TO_WORD[n // 100] + " hundred and " + num_to_word(n % 100)
     else:
@@ -69,7 +76,19 @@ def num_to_word(n: Union[float, int]) -> str:
                 continue
 
             scale_word = DIGIT_TO_WORD[10 ** (3 * (groups - 1))]
-            word_groups.append(num_to_word(num_group) + " " + scale_word)
+            hundreds_part = num_group // 100 * 100
+            ten_and_unit_part = num_group % 100
+
+            if hundreds_part > 0:
+                word_groups.append(num_to_word(hundreds_part))
+            if ten_and_unit_part != 0:
+                if hundreds_part > 0:
+                    word_groups.append("and")
+                word_groups.append(num_to_word(ten_and_unit_part))
+
+            if scale_word != "one":
+                word_groups.append(scale_word)
+
             groups -= 1
 
         return " ".join(word_groups).strip()

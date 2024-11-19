@@ -41,6 +41,7 @@ class TestDigitToWord(unittest.TestCase):
         Test case for checking large scale numbers.
         """
         self.assertEqual(num_to_word(1000), "one thousand")
+        self.assertEqual(num_to_word(5342), "five thousand three hundred and forty-two")
         self.assertEqual(num_to_word(800000), "eight hundred thousand")
         self.assertEqual(num_to_word(700800000), "seven hundred million eight hundred thousand")
 

@@ -1,7 +1,7 @@
 import unittest
 
 from num_word_converter import word_to_num
-from num_word_converter.errors import NoConversionForWordError, ScaleGapError, ScaleOutOfOrderError
+from num_word_converter.errors import NoConversionForWordError, ScaleOutOfOrderError
 
 
 class TestConvertToDigit(unittest.TestCase):
@@ -41,6 +41,7 @@ class TestConvertToDigit(unittest.TestCase):
         Test case for large scaled numbers. Checking if the function correctly converts large scale numbers like trillion.
         """
         self.assertEqual(word_to_num('one trillion'), 1000000000000)
+        self.assertEqual(word_to_num('five thousand three hundred and forty-two'), 5342)
 
     def test_mixed_case_numbers(self) -> None:
         """
@@ -55,8 +56,6 @@ class TestConvertToDigit(unittest.TestCase):
         """
         with self.assertRaises(NoConversionForWordError):
             word_to_num('invalid input')
-        with self.assertRaises(ScaleGapError):
-            word_to_num('one thousand ten')
         with self.assertRaises(ScaleOutOfOrderError):
             word_to_num('one thousand hundred')
 
