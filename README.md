@@ -9,7 +9,7 @@ NumWordConverter is a Python package that provides functionality to convert numb
 
 ## Usage
 ```python
-from NumWordConverter import num_to_word, word_to_num
+from num_word_converter import num_to_word, word_to_num
 
 print(num_to_word(123))
 # one hundred and twenty-three
