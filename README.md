@@ -1,6 +1,6 @@
-# NumWordConverter
+# num-word-converter
 
-NumWordConverter is a Python package that provides functionality to convert numbers to words and words to numbers.
+num-word-converter is a Python package that provides functionality to convert numbers to words and words to numbers.
 
 ## Features
 - Convert integer and float numbers to English words
