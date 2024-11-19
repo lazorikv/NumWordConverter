@@ -1,7 +1,7 @@
 import unittest
 
-from NumWordConverter import num_to_word
-from NumWordConverter.errors import NonNumberInputError
+from num_word_converter import num_to_word
+from num_word_converter.errors import NonNumberInputError
 
 
 class TestDigitToWord(unittest.TestCase):
