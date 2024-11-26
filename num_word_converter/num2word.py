@@ -48,16 +48,20 @@ def num_to_word(n: Union[float, int]) -> str:
 
     if isinstance(n, float):
         n = round(n, 10)
-        int_part, frac_part = divmod(n, 1)
-        frac_part = round(frac_part * 10 ** (len(str(frac_part)) - 2))
-        if len(str(frac_part)) > 10:
+        int_part = int(n)
+        frac_part = abs(n - int_part)
+        
+        frac_str = f'{frac_part:.10f}'.rstrip('0').split('.')[1]
+        
+        if len(frac_str) > 10:
             raise FractionTooLongError(
                 "The fractional part of the input float is too long to convert to words."
             )
+            
         return (
-                num_to_word(int_part)
-                + " point "
-                + " ".join(num_to_word(int(c)) for c in str(frac_part))
+            num_to_word(int_part)
+            + " point "
+            + " ".join(num_to_word(int(d)) for d in frac_str)
         )
 
     if n < 0:
