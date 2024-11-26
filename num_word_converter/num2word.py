@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-.
+import math
 from typing import Union
 
 from num_word_converter.errors import (
@@ -13,10 +14,24 @@ DIGIT_TO_WORD = {scale: word for word, scale in WORD_TO_DIGIT.items()}
 
 def num_to_word(n: Union[float, int]) -> str:
     """
-    Recursively convert an integer or decimal number into English words.
-
-    :param n: The number to convert.
-    :return: The English words string.
+    Convert a number to its word representation in English.
+    
+    Args:
+        n: Number to convert (integer or float)
+        
+    Returns:
+        str: Word representation of the number
+        
+    Raises:
+        NonNumberInputError: If input is not a number
+        ComplexNumberInputError: If input is a complex number
+        FractionTooLongError: If fractional part is too long
+    
+    Examples:
+        >>> num_to_word(42)
+        'forty-two'
+        >>> num_to_word(3.14)
+        'three point one four'
     """
     if not isinstance(n, (int, float)):
         raise NonNumberInputError(
@@ -28,7 +43,11 @@ def num_to_word(n: Union[float, int]) -> str:
             "`digit_to_word` can't convert complex numbers to words."
         )
 
+    if isinstance(n, float) and (n.is_integer() or math.isinf(n) or math.isnan(n)):
+        raise NonNumberInputError("NaN and Infinity are not supported")
+
     if isinstance(n, float):
+        n = round(n, 10)
         int_part, frac_part = divmod(n, 1)
         frac_part = round(frac_part * 10 ** (len(str(frac_part)) - 2))
         if len(str(frac_part)) > 10:

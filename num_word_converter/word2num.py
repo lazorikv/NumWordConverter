@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-.
-from typing import List, Union
+from typing import List, Union, Dict, Final
 
 from num_word_converter.consts import UNITS, TENS, SCALES
 from num_word_converter.errors import (
@@ -8,7 +8,7 @@ from num_word_converter.errors import (
 )
 
 
-WORD_TO_DIGIT = {word: scale for scale, word in enumerate(UNITS)}
+WORD_TO_DIGIT: Final[Dict[str, int]] = {word: scale for scale, word in enumerate(UNITS)}
 WORD_TO_DIGIT.update({word: 10 * scale for scale, word in enumerate(TENS)})
 WORD_TO_DIGIT.update(
     {word: 10 ** (scale * 3 or 2) for scale, word in enumerate(SCALES)}
@@ -44,10 +44,15 @@ def convert_word_to_digit(word_parts: List[str]) -> int:
 
 def word_to_num(word: str) -> Union[int, float]:
     """
-    function to convert number words into an integer
+    Convert number words into an integer or float
     :param word: str
     :return: Union[int, float]
     """
+    if not word or not word.strip():
+        raise NoConversionForWordError("Empty string cannot be converted")
+        
+    word = ' '.join(word.split())
+    
     if word.isdigit():
         return int(word)
 

@@ -1,37 +1,86 @@
-# num-word-converter
+# Number Word Converter
 
-num-word-converter is a Python package that provides functionality to convert numbers to words and words to numbers.
+A Python library for converting numbers to words and vice versa. Supports both integers and decimal numbers.
 
 ## Features
-- Convert integer and float numbers to English words
-- Convert English words of numbers back to integer or float
-- Error handling for non-numeric and complex inputs
+
+- Convert numbers to English words
+- Convert English words to numbers
+- Support for:
+  - Integers
+  - Decimal numbers
+  - Negative numbers
+  - Large numbers (up to trillion)
+
+## Installation
+
+### For Users
+```bash
+pip install num-word-converter
+```
+
+### For Developers
+```bash
+git clone https://github.com/username/num-word-converter.git
+cd num-word-converter
+pip install -e ".[dev]"
+```
 
 ## Usage
+
+### Number to Words
 ```python
-from num_word_converter import num_to_word, word_to_num
-
-print(num_to_word(123))
-# one hundred and twenty-three
-
-print(word_to_num("one hundred and twenty-three"))
-# 123
+from num_word_converter import num_to_word
+# Integer conversion
+print(num_to_word(42)) # Output: "forty-two"
+# Decimal conversion
+print(num_to_word(3.14)) # Output: "three point one four"
+# Negative numbers
+print(num_to_word(-7)) # Output: "negative seven"
+# Large numbers
+print(num_to_word(1000000)) # Output: "one million"
 ```
 
-### Running the tests
-Tests are run using tox, which also builds a coverage report.
-
-If you haven't installed tox, install it using pip:
-
-```bash
-pip install tox
+### Words to Number
+```python
+from num_word_converter import word_to_num
+# Integer words
+print(word_to_num("forty-two")) # Output: 42
+# Decimal words
+print(word_to_num("three point one four")) # Output: 3.14
+# Negative numbers
+print(word_to_num("negative seven")) # Output: -7
+# Large numbers
+print(word_to_num("one million")) # Output: 1000000
 ```
-Then to run the tests, simply run tox from the project root:
 
-```bash
-tox
-```
+## Error Handling
 
-This will run the tests in each environment specified in tox.ini, and generate a coverage report.
-Note that tox handles setting up the virtual environments and installing dependencies, so it's not necessary 
-to activate a virtual environment or install dependencies manually.
+The library includes several error types for proper error handling:
+
+- `NonNumberInputError`: Input is not a number
+- `ComplexNumberInputError`: Input is a complex number
+- `FractionTooLongError`: Fractional part is too long
+- `ScaleOutOfOrderError`: Scale words are in wrong order
+- `NoConversionForWordError`: Word cannot be converted
+
+## Limitations
+
+- Supports numbers up to trillion
+- Maximum 10 decimal places for floating point numbers
+- English language only
+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
