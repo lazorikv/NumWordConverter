@@ -21,9 +21,9 @@ pip install num-word-converter
 
 ### For Developers
 ```bash
-git clone https://github.com/username/num-word-converter.git
+git clone https://github.com/lazorikv/num-word-converter.git
 cd num-word-converter
-pip install -e ".[dev]"
+pip install -e .
 ```
 
 ## Usage
